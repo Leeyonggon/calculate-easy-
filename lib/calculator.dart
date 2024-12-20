@@ -16,6 +16,7 @@ class _CalculatorState extends State<Calculator> {
   dynamic result;
 
   void numberTapped(int tappedNumber) {
+    //숫자 탭하면 전달 받는 메소드
     if (firstOperand == null) {
       setState(() {
         //setState는 상태 반영하기 위해 사용하는 메소드
@@ -43,6 +44,7 @@ class _CalculatorState extends State<Calculator> {
   }
 
   void clearNumber() {
+    //c누르면 초기화
     setState(() {
       firstOperand = null;
       operator = null;
@@ -52,12 +54,14 @@ class _CalculatorState extends State<Calculator> {
   }
 
   void operatorTapped(String tappedOperator) {
+    //연산기호 전달하는 메소드
     setState(() {
       operator = tappedOperator;
     });
   }
 
   String showText() {
+    //탭되는 data들을 보여주는 메소드
     if (result != null) {
       return "$result";
     }
@@ -76,8 +80,9 @@ class _CalculatorState extends State<Calculator> {
   }
 
   void calculateResult() {
+    // 결과값 연산하는 메소드
     if (firstOperand == null || secondOperand == null) {
-      return; //이 if문 실행하면 더 이상 코드 진행하지 않게하는 코드
+      return; //이 if문 실행하면 더 이상 코드 진행하지 않게함
     }
     if (operator == "+") {
       plusNumber();
@@ -98,24 +103,29 @@ class _CalculatorState extends State<Calculator> {
   }
 
   void plusNumber() {
+    //setState를 넣어야만 result가 반영이됨
+    //뎃셈
     setState(() {
       result = firstOperand! + secondOperand!; // !는 null허용 x
     });
   }
 
   void minusNumber() {
+    //뺼셈
     setState(() {
       result = firstOperand! - secondOperand!;
     });
   }
 
   void multiplyNumber() {
+    //곱셈
     setState(() {
       result = firstOperand! * secondOperand!;
     });
   }
 
   void divideNumber() {
+    //나눗셈
     setState(() {
       result = firstOperand! / secondOperand!;
     });
@@ -144,7 +154,7 @@ class _CalculatorState extends State<Calculator> {
               CircleButton(
                   padnumber: "7",
                   onTap: () => numberTapped(
-                      7)), //lamda식을 사용헤서 onTap같이 (매개변수가 없는 void함수에게 매개변수가 있는 메소드도 사용할 수 있게 함
+                      7)), //lamda식을 사용헤서 onTap같이 (매개변수가 없는 void함수(return x)에게 매개변수가 있는 메소드도 사용할 수 있게 함
               CircleButton(padnumber: "8", onTap: () => numberTapped(8)),
               CircleButton(padnumber: "9", onTap: () => numberTapped(9)),
               CircleButton(padnumber: "%", onTap: () => operatorTapped("%")),
