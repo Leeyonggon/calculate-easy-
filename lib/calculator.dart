@@ -1,3 +1,4 @@
+import 'package:calculate/circle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -17,6 +18,7 @@ class _CalculatorState extends State<Calculator> {
   void numberTapped(int tappedNumber) {
     if (firstOperand == null) {
       setState(() {
+        //setState는 상태 반영하기 위해 사용하는 메소드
         firstOperand = tappedNumber;
       });
       return; //위에 코드가 실행되면 더 이상 실행되지 않게함
@@ -56,17 +58,67 @@ class _CalculatorState extends State<Calculator> {
   }
 
   String showText() {
+    if (result != null) {
+      return "$result";
+    }
+
     if (secondOperand != null) {
-      return "$firstOperand$operator$secondOperand";
+      return "$firstOperand\t$operator $secondOperand";
     }
     if (operator != null) {
-      return "$firstOperand$operator";
+      return "$firstOperand\t$operator";
     }
     if (firstOperand != null) {
       return "$firstOperand";
     }
 
     return "0";
+  }
+
+  void calculateResult() {
+    if (firstOperand == null || secondOperand == null) {
+      return; //이 if문 실행하면 더 이상 코드 진행하지 않게하는 코드
+    }
+    if (operator == "+") {
+      plusNumber();
+      return;
+    }
+    if (operator == "-") {
+      minusNumber();
+      return;
+    }
+    if (operator == "x") {
+      multiplyNumber();
+      return;
+    }
+    if (operator == "%") {
+      divideNumber();
+      return;
+    }
+  }
+
+  void plusNumber() {
+    setState(() {
+      result = firstOperand! + secondOperand!; // !는 null허용 x
+    });
+  }
+
+  void minusNumber() {
+    setState(() {
+      result = firstOperand! - secondOperand!;
+    });
+  }
+
+  void multiplyNumber() {
+    setState(() {
+      result = firstOperand! * secondOperand!;
+    });
+  }
+
+  void divideNumber() {
+    setState(() {
+      result = firstOperand! / secondOperand!;
+    });
   }
 
   @override
@@ -84,116 +136,44 @@ class _CalculatorState extends State<Calculator> {
       ),
       body: Column(
         children: [
+          const SizedBox(
+            height: 10,
+          ),
           Row(
             children: [
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        numberTapped(7);
-                      },
-                      child: const Text("7"))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        numberTapped(8);
-                      },
-                      child: const Text("8"))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        numberTapped(9);
-                      },
-                      child: const Text("9"))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        operatorTapped("%");
-                      },
-                      child: const Text("%"))),
+              CircleButton(
+                  padnumber: "7",
+                  onTap: () => numberTapped(
+                      7)), //lamda식을 사용헤서 onTap같이 (매개변수가 없는 void함수에게 매개변수가 있는 메소드도 사용할 수 있게 함
+              CircleButton(padnumber: "8", onTap: () => numberTapped(8)),
+              CircleButton(padnumber: "9", onTap: () => numberTapped(9)),
+              CircleButton(padnumber: "%", onTap: () => operatorTapped("%")),
             ],
           ),
           Row(
             children: [
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        numberTapped(4);
-                      },
-                      child: const Text("4"))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        numberTapped(5);
-                      },
-                      child: const Text("5"))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        numberTapped(6);
-                      },
-                      child: const Text("6"))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        operatorTapped("x");
-                      },
-                      child: const Text("x"))),
+              CircleButton(padnumber: "4", onTap: () => numberTapped(4)),
+              CircleButton(padnumber: "5", onTap: () => numberTapped(5)),
+              CircleButton(padnumber: "6", onTap: () => numberTapped(6)),
+              CircleButton(padnumber: "x", onTap: () => operatorTapped("x")),
             ],
           ),
           Row(
             children: [
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        numberTapped(1);
-                      },
-                      child: const Text("1"))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        numberTapped(2);
-                      },
-                      child: const Text("2"))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        numberTapped(3);
-                      },
-                      child: const Text("3"))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        operatorTapped("-");
-                      },
-                      child: const Text("-"))),
+              CircleButton(padnumber: "1", onTap: () => numberTapped(1)),
+              CircleButton(padnumber: "2", onTap: () => numberTapped(2)),
+              CircleButton(padnumber: "3", onTap: () => numberTapped(3)),
+              CircleButton(padnumber: "-", onTap: () => operatorTapped("-")),
             ],
           ),
           Row(
             children: [
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        clearNumber();
-                      },
-                      child: const Text("C"))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        numberTapped(0);
-                      },
-                      child: const Text("0"))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        operatorTapped("=");
-                      },
-                      child: const Text("="))),
-              Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        operatorTapped("+");
-                      },
-                      child: const Text("+"))),
+              CircleButton(
+                  padnumber: "C",
+                  onTap: clearNumber), // clearnumber함수는 매개변수가 없으므로 lamda사용안해도 됨
+              CircleButton(padnumber: "0", onTap: () => numberTapped(0)),
+              CircleButton(padnumber: "=", onTap: calculateResult),
+              CircleButton(padnumber: "+", onTap: () => operatorTapped("+")),
             ],
           ),
         ],
